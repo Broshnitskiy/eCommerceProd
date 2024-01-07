@@ -2,6 +2,8 @@ import "./globals.css";
 import { Roboto } from "next/font/google";
 import CssBaseline from "@mui/material/CssBaseline";
 import ReduxProvider from "@/components/ReduxProvider";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -19,9 +21,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={roboto.className}>
         <CssBaseline />
-        {/* <Header /> */}
-        <ReduxProvider>{children}</ReduxProvider>
-        {/* <Footer /> */}
+        <div className="wrapper">
+          <Header />
+          <ReduxProvider>{children}</ReduxProvider>
+          <Footer />
+        </div>
       </body>
     </html>
   );

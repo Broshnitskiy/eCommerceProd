@@ -12,6 +12,7 @@ import {
   Box,
   Paper,
   Container,
+  useMediaQuery,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -24,6 +25,7 @@ export default function Basket() {
   const router = useRouter();
   const dispatch = useDispatch();
   const cartItems = useSelector(order());
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const handleIncreaseQuantity = (itemId) => {
     dispatch(increment(itemId));
@@ -55,14 +57,22 @@ export default function Basket() {
                 <Paper elevation={3}>
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
+                      ...(isMobile
+                        ? { flexDirection: "column", alignItems: "stretch" }
+                        : { display: "flex", alignItems: "center" }),
                       padding: "10px",
                     }}
                   >
                     <Box
                       component="div"
-                      sx={{ width: 100, height: "auto", marginRight: "50px" }}
+                      sx={{
+                        width: 100,
+                        height: "auto",
+                        marginRight: isMobile ? "auto" : "50px",
+                        marginLeft: isMobile ? "auto" : "0",
+                        marginTop: isMobile ? "10px" : "0",
+                        marginBottom: isMobile ? "10px" : "0",
+                      }}
                     >
                       <Image
                         width={100}
@@ -96,7 +106,10 @@ export default function Basket() {
                           >
                             <RemoveIcon />
                           </IconButton>
-                          <Typography variant="body2">
+                          <Typography
+                            variant="body2"
+                            sx={{ textAlign: "center" }}
+                          >
                             Quantity: {item.quantity}
                           </Typography>
                           <IconButton

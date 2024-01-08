@@ -39,8 +39,9 @@ export default function Basket() {
   };
 
   const handleCheckout = () => {
-    console.log("Checkout button clicked");
+    router.push("/order");
   };
+
   return (
     <main style={{ paddingTop: "100px", paddingBottom: "60px" }}>
       {cartItems.length > 0 ? (

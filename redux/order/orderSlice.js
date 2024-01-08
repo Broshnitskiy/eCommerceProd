@@ -31,10 +31,13 @@ export const orderSlice = createSlice({
     removeProduct: (state, { payload }) => {
       state.products = state.products.filter((p) => p.id !== payload);
     },
+    clearOrder: (state) => {
+      state.products = [];
+    },
   },
 });
 
-export const { increment, decrement, addProduct, removeProduct } =
+export const { increment, decrement, addProduct, removeProduct, clearOrder } =
   orderSlice.actions;
 
 export default orderSlice.reducer;

@@ -2,7 +2,7 @@
 
 import React from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
   Typography,
@@ -16,9 +16,11 @@ import { useFormik } from "formik";
 import { order } from "@/redux/order/orderSelectors";
 import { orderSchema } from "@/helpers/orderSchema";
 import toast from "react-hot-toast";
+import { clearOrder } from "@/redux/order/orderSlice";
 
 const OrderPage = () => {
   const cartItems = useSelector(order());
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const formik = useFormik({
@@ -89,6 +91,7 @@ const OrderPage = () => {
       });
 
       resetForm();
+      dispatch(clearOrder());
     },
   });
 

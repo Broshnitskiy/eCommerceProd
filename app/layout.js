@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import CssBaseline from "@mui/material/CssBaseline";
+import { Toaster } from "react-hot-toast";
 import ReduxProvider from "@/components/ReduxProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -21,11 +22,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={roboto.className}>
         <CssBaseline />
-        <div className="wrapper">
-          <Header />
-          <ReduxProvider>{children}</ReduxProvider>
-          <Footer />
-        </div>
+        <Toaster />
+
+        <ReduxProvider>
+          <div className="wrapper">
+            <Header />
+            {children}
+            <Footer />
+          </div>
+        </ReduxProvider>
       </body>
     </html>
   );

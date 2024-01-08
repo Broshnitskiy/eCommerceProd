@@ -6,21 +6,22 @@ import {
   useGetProductByCategoryQuery,
 } from "@/redux/product/productSlice";
 import { useGetAllCategoriesQuery } from "@/redux/categories/categoriesSlice";
+
 import ProductGallery from "@/components/ProductGallery";
 import SideBar from "@/components/SideBar";
+import SearchInput from "@/components/SearchInput";
+
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Pagination from "@mui/material/Pagination";
-import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
 import Typography from "@mui/material/Typography";
-import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
+import toast from "react-hot-toast";
 
 const drawerWidth = 260;
-const ALL = "УСІ";
+const ALL = "ALL";
 const PRODUCTS_PER_PAGE = 6;
 
 export default function Home() {
@@ -33,21 +34,39 @@ export default function Home() {
     data: allCategoriesData,
     error: allCategoriesError,
     isLoading: allCategoriesLoading,
+    isError: isCategoriesError,
   } = useGetAllCategoriesQuery();
 
   const {
     data: allProductsData,
     error: allProductsError,
     isLoading: allProductsLoading,
+    isError: isProductsError,
   } = useGetAllProductsQuery();
 
   const {
     data: productByCategoryData,
     error: productByCategoryError,
     isLoading: productByCategoryLoading,
+    isError: isproductByCategoryError,
   } = useGetProductByCategoryQuery(
     selectedCategory !== ALL ? selectedCategory : ""
   );
+
+  if (isCategoriesError) {
+    toast.error("There was an error loading the categories");
+    console.log(allCategoriesError);
+  }
+
+  if (isProductsError) {
+    toast.error("There was an error loading the products");
+    console.log(allProductsError);
+  }
+
+  if (isproductByCategoryError) {
+    toast.error("There was an error loading the product in category");
+    console.log(productByCategoryError);
+  }
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -87,8 +106,6 @@ export default function Home() {
   const endIndex = startIndex + PRODUCTS_PER_PAGE;
   const paginatedData = filteredRenderData?.slice(startIndex, endIndex);
 
-  console.log(paginatedData);
-
   return (
     <main style={{ paddingTop: "50px" }}>
       {allCategoriesLoading || allProductsLoading ? (
@@ -108,6 +125,7 @@ export default function Home() {
             onCategoryClick={handleCategoryClick}
             selectedCategory={selectedCategory}
           />
+
           <Box
             component="div"
             sx={{
@@ -127,27 +145,12 @@ export default function Home() {
               </IconButton>
             </Toolbar>
 
-            <Box sx={{ mt: 2, mb: 2 }}>
-              <TextField
-                label="Пошук"
-                type="search"
-                variant="outlined"
-                autoComplete="off"
-                fullWidth
-                value={searchQuery}
-                onChange={handleSearchChange}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Box>
+            <SearchInput
+              searchQuery={searchQuery}
+              handleSearchChange={handleSearchChange}
+            />
 
             <ProductGallery products={paginatedData || []} />
-
             {productByCategoryLoading && (
               <CircularProgress
                 style={{
@@ -157,13 +160,11 @@ export default function Home() {
                 }}
               />
             )}
-
             {searchQuery && paginatedData && paginatedData.length === 0 && (
               <Typography variant="h6" noWrap component="p">
-                Нічого не знайдено
+                Nothing found
               </Typography>
             )}
-
             {filteredRenderData && filteredRenderData.length > 6 && (
               <Pagination
                 count={Math.ceil(

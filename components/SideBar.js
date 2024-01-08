@@ -12,7 +12,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 const drawerWidth = 260;
-const ALL = "УСІ";
+const ALL = "ALL";
 
 function SideBar({
   categories,
@@ -30,7 +30,7 @@ function SideBar({
       <Toolbar />
       <Divider />
       <Typography sx={{ paddingTop: "20px" }} variant="body1" align="center">
-        КАТЕГОРІЇ:
+        CATEGORIES:
       </Typography>
       <Divider />
       <List>

@@ -1,14 +1,17 @@
 "use client";
 
 import React from "react";
+import { useSelector } from "react-redux";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Link from "next/link";
+import { order } from "@/redux/order/orderSelectors";
 
 function Header() {
+  const productsInOrder = useSelector(order());
   return (
     <AppBar position="fixed">
       <Toolbar>
@@ -22,7 +25,7 @@ function Header() {
           style={{
             textDecoration: "none",
             color: "inherit",
-            marginRight: "30px",
+            marginRight: "20px",
           }}
         >
           Home
@@ -40,7 +43,7 @@ function Header() {
                 fontSize: "16px",
               }}
             >
-              25
+              {productsInOrder ? productsInOrder.length : ""}
             </span>
           </IconButton>
         </Link>

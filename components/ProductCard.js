@@ -7,17 +7,27 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Box, Button, CardActionArea, CardActions } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct } from "@/redux/order/orderSlice";
+import { order } from "@/redux/order/orderSelectors";
+import toast from "react-hot-toast";
 
 function ProductCard({ product }) {
-  const [isButtonClick, setIsButtonClick] = useState(false);
+  const router = useRouter();
+  const productsInOrder = useSelector(order());
+  const dispatch = useDispatch();
 
-  const handleClick = () => {
-    setIsButtonClick(true);
+  const isAdded = productsInOrder.find((p) => p.id === product.id);
+
+  const handleClick = (product) => {
+    dispatch(addProduct(product));
+    toast.success("Product has added to basket");
   };
 
   return (
     <Card style={{ width: "100%", display: "flex", flexDirection: "column" }}>
-      <CardActionArea>
+      <CardActionArea onClick={() => router.push(`/${product.id}`)}>
         <Box component="div" style={{ height: "400px" }}>
           <CardMedia
             component="img"
@@ -37,7 +47,7 @@ function ProductCard({ product }) {
             {product.title}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Категорія: {product.category}
+            Category: {product.category}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -46,26 +56,23 @@ function ProductCard({ product }) {
         style={{ marginTop: "auto", justifyContent: "space-between" }}
       >
         <Typography component="p" variant="h5" color="tomato">
-          Ціна: {product.price}
+          Price: ${product.price}
         </Typography>
-        {!isButtonClick ? (
+        {!isAdded ? (
           <Button
             variant="contained"
             size="medium"
             color="success"
-            onClick={handleClick}
+            onClick={() => {
+              handleClick(product);
+            }}
           >
-            ПРИДБАТИ
+            BUY
           </Button>
         ) : (
           <Link href="/basket">
-            <Button
-              variant="outlined"
-              size="small"
-              color="success"
-              onClick={handleClick}
-            >
-              ПЕРЕЙТИ В КОРЗИНУ
+            <Button variant="outlined" size="small" color="success">
+              GO TO BASKET
             </Button>
           </Link>
         )}

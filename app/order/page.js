@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
@@ -27,15 +28,56 @@ const OrderPage = () => {
       phone: "",
     },
     validationSchema: orderSchema,
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       const orderData = {
         ...values,
         order: cartItems,
       };
       console.log("Order submitted:", orderData);
-      // Place logic to send email and handle successful order here
-      // For example, you can use a service to send an email
-      // and show a success message to the user.
+
+      //відправляємо дані на бекенд для подальшої обробки замовлення
+      // try {
+      //   const response = await axios.post(
+      //     "https://hostname/api/order",
+      //     orderData
+      //   );
+      //   console.log(response.data);
+      // } catch (error) {
+      //   console.log(error);
+      // }
+
+      // приклад відправки листа через sandbox-letters (хоча листи переважно відправляються на бекенді черех nodemailer або сервіс SendGrid)
+      //  const apiKey = "your-sandbox-letters-api-key"; // Замініть на свій API ключ
+      //  const apiUrl = "https://sandbox.letter.com/api/v1/mail/send";
+
+      //  const clientMailOptions = {
+      //    from: "your-email@example.com",
+      //    to: values.email,
+      //    subject: "Order Confirmation",
+      //    text: `Thank you for your order! We will contact you soon.`,
+      //  };
+
+      //  const managerMailOptions = {
+      //    from: "your-email@example.com",
+      //    to: "manager@example.com", // Замініть на реальну адресу менеджера
+      //    subject: "New Order Received",
+      //    text: `New order received from ${values.name}. Check the details in your dashboard.`,
+      //  };
+
+      //  // Відправте листи
+      //  await axios.post(apiUrl, clientMailOptions, {
+      //    headers: {
+      //      Authorization: `Bearer ${apiKey}`,
+      //      "Content-Type": "application/json",
+      //    },
+      //  });
+
+      //  await axios.post(apiUrl, managerMailOptions, {
+      //    headers: {
+      //      Authorization: `Bearer ${apiKey}`,
+      //      "Content-Type": "application/json",
+      //    },
+      //  });
 
       toast("Data sent successfully", {
         icon: "👏",
@@ -45,6 +87,7 @@ const OrderPage = () => {
           color: "#fff",
         },
       });
+
       resetForm();
     },
   });

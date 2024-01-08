@@ -15,29 +15,26 @@ export const orderSlice = createSlice({
       });
     },
     increment: (state, { payload }) => {
-      const product = state.products.find((p) => p.id === payload.id);
+      const product = state.products.find((p) => p.id === payload);
       if (product) {
         product.quantity += 1;
       }
     },
     decrement: (state, { payload }) => {
-      const product = state.products.find((p) => p.id === payload.id);
+      const product = state.products.find((p) => p.id === payload);
       if (product) {
         if (product.quantity > 1) {
           product.quantity -= 1;
         }
       }
     },
-    incrementByAmount: (state, { payload }) => {
-      const product = state.products.find((p) => p.id === payload.id);
-      if (product) {
-        product.quantity += payload.amount;
-      }
+    removeProduct: (state, { payload }) => {
+      state.products = state.products.filter((p) => p.id !== payload);
     },
   },
 });
 
-export const { increment, decrement, incrementByAmount, addProduct } =
+export const { increment, decrement, addProduct, removeProduct } =
   orderSlice.actions;
 
 export default orderSlice.reducer;
